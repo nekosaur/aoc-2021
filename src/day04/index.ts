@@ -39,7 +39,12 @@ function* play (numbers: number[], boards: number[][]) {
 
       if (rv === 5 || cv === 5) {
         finished.add(i)
-        yield score(board, numbers, number)
+
+        if (finished.size === boards.length) {
+          return score(board, numbers, number)
+        } else {
+          yield score(board, numbers, number)
+        }
       } 
 
       result.set(ri, rv)
@@ -47,7 +52,7 @@ function* play (numbers: number[], boards: number[][]) {
     }
   }
 
-  return 0
+  throw new Error('Something went wrong if we got here')
 }
 
 const part1 = (rawInput: string) => {
@@ -66,14 +71,12 @@ const part2 = (rawInput: string) => {
   const it = play(numbers, boards)
 
   let result = it.next()
-  let last = 0
   
   while (!result.done) {
-    last = result.value
     result = it.next()
   }
 
-  return last
+  return result.value
 }
 
 const exampleInput = `
