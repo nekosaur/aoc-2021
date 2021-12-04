@@ -29,3 +29,12 @@
  *     import { myUtil } from '../utils'
  *
  */
+
+export const range = (length: number, start = 0) =>
+ [...Array(length).keys()].map((i) => i + start)
+
+export const transpose = (arr: number[][]) => {
+ return range(arr[0].length).map((i) =>
+   range(arr.length).map((j) => arr[j][i]),
+ )
+}

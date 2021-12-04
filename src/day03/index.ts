@@ -1,16 +1,8 @@
 import run from 'aocrunner'
+import { transpose } from '../utils/index.js'
 
 const parseInput = (rawInput: string) =>
   rawInput.split('\n').map((line) => line.split('').map(Number))
-
-const range = (length: number, start = 0) =>
-  [...Array(length).keys()].map((i) => i + start)
-
-const transpose = (arr: number[][]) => {
-  return range(arr[0].length).map((i) =>
-    range(arr.length).map((j) => arr[j][i]),
-  )
-}
 
 const count = (arr: number[]): [number, number] =>
   arr.reduce(
