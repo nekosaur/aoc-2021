@@ -33,8 +33,18 @@
 export const range = (length: number, start = 0) =>
  [...Array(length).keys()].map((i) => i + start)
 
-export const transpose = (arr: number[][]) => {
+export const transpose = <T>(arr: T[][]) => {
  return range(arr[0].length).map((i) =>
    range(arr.length).map((j) => arr[j][i]),
  )
+}
+
+export const zip = <T, U>(a: T[], b: U[]) => {
+  const out: [T, U][] = []
+
+  for (let i = 0; i < a.length; i++) {
+    out.push([a[i], b[i]])
+  }
+
+  return out
 }
