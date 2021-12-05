@@ -1,10 +1,18 @@
 import run from 'aocrunner'
 
-const parseInput = (rawInput: string) => rawInput.split('\n').map(row => {
-  return row.split(' -> ').flatMap(p => p.split(',').map(Number))
-})
+type Line = [number, number, number, number]
 
-const count = (lines: number[][]) => {
+const parseInput = (rawInput: string) => rawInput
+  .split('\n')
+  .map(row => row
+    .split(' -> ')
+    .flatMap(p => p
+      .split(',')
+      .map(Number)
+    ) as Line
+  )
+
+const count = (lines: Line[]) => {
   const seen = new Map<number, boolean>()
   let count = 0
 
@@ -15,17 +23,14 @@ const count = (lines: number[][]) => {
     let y = y1
 
     for (let i = 0; i <= Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1)); i++) {
+      // There are no values larger than 999 so using 1000 here should be fine
       const key = (y * 1000) + x
 
       if (!seen.has(key)) {
         seen.set(key, false)
-      } else {
-        const counted = seen.get(key)
-
-        if (!counted) {
-          count += 1
-          seen.set(key, true)
-        }
+      } else if (!seen.get(key)) {
+        count += 1
+        seen.set(key, true)
       }
 
       x += dx
@@ -37,9 +42,7 @@ const count = (lines: number[][]) => {
 }
 
 const part1 = (rawInput: string) => {
-  const lines = parseInput(rawInput).filter(([x1, y1, x2, y2]: number[]) => {
-    return x1 === x2 || y1 === y2
-  })
+  const lines = parseInput(rawInput).filter(([x1, y1, x2, y2]) => x1 === x2 || y1 === y2)
 
   return count(lines)
 }
