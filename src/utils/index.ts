@@ -31,12 +31,12 @@
  */
 
 export const range = (length: number, start = 0) =>
- [...Array(length).keys()].map((i) => i + start)
+  [...Array(length).keys()].map((i) => i + start)
 
 export const transpose = <T>(arr: T[][]) => {
- return range(arr[0].length).map((i) =>
-   range(arr.length).map((j) => arr[j][i]),
- )
+  return range(arr[0].length).map((i) =>
+    range(arr.length).map((j) => arr[j][i]),
+  )
 }
 
 export const zip = <T, U>(a: T[], b: U[]) => {
@@ -47,4 +47,11 @@ export const zip = <T, U>(a: T[], b: U[]) => {
   }
 
   return out
+}
+
+export function sum (arr: number[]): number
+export function sum (arr: bigint[]): bigint
+export function sum (arr: bigint[] | number[]): number | bigint {
+  if (typeof arr[0] === 'number') return (arr as unknown as number[]).reduce((curr, n) => curr + n, 0)
+  return (arr as unknown as bigint[]).reduce((curr, n) => curr + n, 0n)
 }
