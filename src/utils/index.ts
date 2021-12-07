@@ -49,9 +49,18 @@ export const zip = <T, U>(a: T[], b: U[]) => {
   return out
 }
 
-export function sum (arr: number[]): number
-export function sum (arr: bigint[]): bigint
-export function sum (arr: bigint[] | number[]): number | bigint {
-  if (typeof arr[0] === 'number') return (arr as unknown as number[]).reduce((curr, n) => curr + n, 0)
+export function sum(arr: number[]): number
+export function sum(arr: bigint[]): bigint
+export function sum(arr: bigint[] | number[]): number | bigint {
+  if (typeof arr[0] === 'number')
+    return (arr as unknown as number[]).reduce((curr, n) => curr + n, 0)
   return (arr as unknown as bigint[]).reduce((curr, n) => curr + n, 0n)
 }
+
+export const minmax = (arr: number[]): [number, number] =>
+  arr.reduce(
+    ([min, max], n) => {
+      return [n < min ? n : min, n > max ? n : max]
+    },
+    [Number.MAX_VALUE, Number.MIN_VALUE],
+  )
