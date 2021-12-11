@@ -30,13 +30,10 @@
  *
  */
 
-export const range = (length: number, start = 0) =>
-  [...Array(length).keys()].map((i) => i + start)
+export const range = (length: number, start = 0) => [...Array(length).keys()].map((i) => i + start)
 
 export const transpose = <T>(arr: T[][]) => {
-  return range(arr[0].length).map((i) =>
-    range(arr.length).map((j) => arr[j][i]),
-  )
+  return range(arr[0].length).map((i) => range(arr.length).map((j) => arr[j][i]))
 }
 
 export const zip = <T, U>(a: T[], b: U[]) => {
@@ -72,3 +69,23 @@ export const intersection = <T>(a: Set<T>, b: Set<T>): Set<T> =>
 
 export const difference = <T>(a: Set<T>, b: Set<T>): Set<T> =>
   new Set([...a].filter((x) => !b.has(x)))
+
+export const last = <T, U>(gen: Generator<T, U>): U => {
+  let next
+  while (!(next = gen.next()).done) {}
+  return next.value
+}
+
+export const valueAt = <T, U>(gen: Generator<T, U>, step: number): T | U => {
+  let next = gen.next()
+  let value = next.value
+
+  for (let i = 0; i < step - 1; i++) {
+    if (next.done) throw new Error('Generator is already finished')
+
+    next = gen.next()
+    value = next.value
+  }
+
+  return value
+}

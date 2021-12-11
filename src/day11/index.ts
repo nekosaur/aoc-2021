@@ -1,4 +1,5 @@
 import run from 'aocrunner'
+import { last, valueAt } from '../utils/index.js'
 
 type MapData = {
   width: number
@@ -21,14 +22,17 @@ const parseInput = (rawInput: string) => {
 }
 
 const neighbours = (map: number[], i: number, width: number) => {
+  const firstColumn = i % width === 0
+  const lastColumn = i % width === width - 1
+
   const positions = [
-    i % width > 0 && i - 1,
-    i % width > 0 && i - width - 1,
-    i % width > 0 && i + width - 1,
+    !firstColumn && i - 1,
+    !firstColumn && i - width - 1,
+    !firstColumn && i + width - 1,
     i - width,
-    i % width < width - 1 && i + 1,
-    i % width < width - 1 && i + width + 1,
-    i % width < width - 1 && i - width + 1,
+    !lastColumn && i + 1,
+    !lastColumn && i + width + 1,
+    !lastColumn && i - width + 1,
     i + width,
   ]
     .map((i) => {
@@ -92,29 +96,13 @@ function* step({ map, width }: MapData) {
 const part1 = (rawInput: string) => {
   const input = parseInput(rawInput)
 
-  const gen = step(input)
-  let flashes = 0
-
-  for (let i = 0; i < 100; i++) {
-    flashes = gen.next().value
-  }
-
-  return flashes
+  return valueAt(step(input), 100)
 }
 
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput)
 
-  const gen = step(input)
-  let it = gen.next()
-  let sync = 0
-
-  while (!it.done) {
-    it = gen.next()
-    sync = it.value
-  }
-
-  return sync
+  return last(step(input))
 }
 
 const exampleInput = `

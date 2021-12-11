@@ -139,9 +139,9 @@ Both parts: 4.760000000000001ms
 
 ```
 Day 11
-Time part 1: 5.27ms
-Time part 2: 8.62ms
-Both parts: 13.89ms
+Time part 1: 0.93ms
+Time part 2: 2.49ms
+Both parts: 3.42ms
 ```
 
 ```
