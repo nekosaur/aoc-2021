@@ -1,5 +1,5 @@
 import run from 'aocrunner'
-import { last, valueAt } from '../utils/index.js'
+import { last, neighbours, valueAt } from '../utils/index.js'
 
 type MapData = {
   width: number
@@ -19,30 +19,6 @@ const parseInput = (rawInput: string) => {
     height,
     map,
   } as MapData
-}
-
-const neighbours = (map: number[], i: number, width: number) => {
-  const firstColumn = i % width === 0
-  const lastColumn = i % width === width - 1
-
-  const positions = [
-    !firstColumn && i - 1,
-    !firstColumn && i - width - 1,
-    !firstColumn && i + width - 1,
-    i - width,
-    !lastColumn && i + 1,
-    !lastColumn && i + width + 1,
-    !lastColumn && i - width + 1,
-    i + width,
-  ]
-    .map((i) => {
-      if (i === false || map[i] == null) return null
-
-      return [i, i % width, Math.floor(i / width)]
-    })
-    .filter((x) => !!x) as number[][]
-
-  return positions
 }
 
 function* step({ map, width }: MapData) {
@@ -67,7 +43,7 @@ function* step({ map, width }: MapData) {
 
       if (ci == null) throw new Error('foo')
 
-      for (const [ni] of neighbours(map, ci, width)) {
+      for (const [ni] of neighbours(map, ci, width, true)) {
         if (flashed.has(ni)) continue
 
         map[ni] += 1

@@ -89,3 +89,37 @@ export const valueAt = <T, U>(gen: Generator<T, U>, step: number): T | U => {
 
   return value
 }
+
+export const neighbours = (map: number[], i: number, width: number, allowDiagonals = false) => {
+  const firstColumn = i % width === 0
+  const lastColumn = i % width === width - 1
+
+  let positions: number[] = [
+    i - width,
+    i + width,
+  ]
+
+  if (!firstColumn) {
+    positions.push(i - 1)
+
+    if (allowDiagonals) {
+      positions.push(i - width - 1)
+      positions.push(i + width - 1)
+    }
+  }
+
+  if (!lastColumn) {
+    positions.push(i + 1)
+
+    if (allowDiagonals) {
+      positions.push(i + width + 1)
+      positions.push(i - width + 1)
+    }
+  }
+
+  return positions.map((i) => {
+    if (map[i] == null) return null
+
+    return [i, i % width, Math.floor(i / width)]
+  }).filter(x => !!x) as number[][]
+}

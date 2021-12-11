@@ -1,4 +1,5 @@
 import run from 'aocrunner'
+import { neighbours } from '../utils/index.js'
 
 type MapData = {
   width: number
@@ -20,18 +21,6 @@ const parseInput = (rawInput: string) => {
   } as MapData
 }
 
-const neighbours = ({ map, width }: MapData, i: number) => {
-  const positions = [i % width > 0 && i - 1, i - width, i % width < width - 1 && i + 1, i + width]
-    .map((i) => {
-      if (i === false || map[i] == null) return null
-
-      return [i, i % width, Math.floor(i / width)]
-    })
-    .filter((x) => !!x) as number[][]
-
-  return positions
-}
-
 const findLowestPoints = ({ map, width, height }: MapData) => {
   const lowest = []
 
@@ -39,7 +28,7 @@ const findLowestPoints = ({ map, width, height }: MapData) => {
     const x = i % width
     const y = Math.floor(i / width)
 
-    if (neighbours({ map, width, height }, i).every(([ni]) => map[ni] > map[i])) {
+    if (neighbours(map, i, width).every(([ni]) => map[ni] > map[i])) {
       lowest.push([i, x, y])
     }
   }
@@ -65,7 +54,7 @@ const findBasins = ({ map, width, height }: MapData, lowest: number[][]) => {
 
       basin.add(ci)
 
-      for (const [ni] of neighbours({ map, width, height }, ci)) {
+      for (const [ni] of neighbours(map, ci, width)) {
         if (basin.has(ni) || map[ni] === 9) continue
 
         queue.push(ni)
