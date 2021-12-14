@@ -1,25 +1,29 @@
 import run from 'aocrunner'
 
-const parseInput = (rawInput: string) => rawInput.split('\n').reduce(([nodes, children], path) => {
-  const [start, end] = path.split('-')
+const parseInput = (rawInput: string) =>
+  rawInput.split('\n').reduce(
+    ([nodes, children], path) => {
+      const [start, end] = path.split('-')
 
-  nodes.add(start)
-  nodes.add(end)
+      nodes.add(start)
+      nodes.add(end)
 
-  const startChildren = children.get(start)
-  children.set(start, startChildren ? [...startChildren, end] : [end])
+      const startChildren = children.get(start)
+      children.set(start, startChildren ? [...startChildren, end] : [end])
 
-  const endChildren = children.get(end)
-  children.set(end, endChildren ? [...endChildren, start] : [start])
+      const endChildren = children.get(end)
+      children.set(end, endChildren ? [...endChildren, start] : [start])
 
-  return [nodes, children] as [Set<string>, Map<string, string[]>]
-}, [new Set<string>(), new Map<string, string[]>()] as [Set<string>, Map<string, string[]>])
+      return [nodes, children] as [Set<string>, Map<string, string[]>]
+    },
+    [new Set<string>(), new Map<string, string[]>()] as [Set<string>, Map<string, string[]>],
+  )
 
 const part1 = (rawInput: string) => {
   const [_, children] = parseInput(rawInput)
   const paths: string[][] = []
 
-  function dfs (path: string[], current: string, visited: Set<string>) {
+  function dfs(path: string[], current: string, visited: Set<string>) {
     if (current === 'end') {
       paths.push(path)
       return
@@ -46,7 +50,13 @@ const part2 = (rawInput: string) => {
   const [_, children] = parseInput(rawInput)
   const paths: string[][] = []
 
-  function dfs (path: string[], current: string, visited: Set<string>, small: Set<string>, flipped: boolean) {
+  function dfs(
+    path: string[],
+    current: string,
+    visited: Set<string>,
+    small: Set<string>,
+    flipped: boolean,
+  ) {
     if (current === 'end') {
       paths.push(path)
       return
@@ -65,7 +75,7 @@ const part2 = (rawInput: string) => {
           s.add(n)
         } else {
           f = true
-          ;[...s].forEach(n => v.add(n))
+          ;[...s].forEach((n) => v.add(n))
         }
       }
 
@@ -78,14 +88,16 @@ const part2 = (rawInput: string) => {
   return paths.length
 }
 
-const examples: string[] = [`
+const examples: string[] = [
+  `
 start-A
 start-b
 A-c
 A-b
 b-d
 A-end
-b-end`, `
+b-end`,
+  `
 dc-end
 HN-start
 start-kj
@@ -95,7 +107,8 @@ LN-dc
 HN-end
 kj-sa
 kj-HN
-kj-dc`, `
+kj-dc`,
+  `
 fs-end
 he-DX
 fs-he
@@ -113,7 +126,8 @@ start-pj
 he-WI
 zg-he
 pj-fs
-start-RW`]
+start-RW`,
+]
 
 run({
   part1: {

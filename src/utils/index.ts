@@ -54,13 +54,17 @@ export function sum(arr: bigint[] | number[]): number | bigint {
   return (arr as unknown as bigint[]).reduce((curr, n) => curr + n, 0n)
 }
 
-export const minmax = (arr: number[]): [number, number] =>
-  arr.reduce(
-    ([min, max], n) => {
-      return [n < min ? n : min, n > max ? n : max]
-    },
-    [Number.MAX_VALUE, Number.MIN_VALUE],
-  )
+function isBigInt(x: any): x is bigint[] {
+  return Array.isArray(x) && typeof x[0] === 'bigint'
+}
+
+export function minmax(arr: bigint[]): [bigint, bigint]
+export function minmax(arr: number[] | bigint[]): [number, number] | [bigint, bigint] {
+  if (isBigInt(arr))
+    return arr.reduce(([min, max], n) => [n < min ? n : min, n > max ? n : max], [arr[0], arr[0]])
+  else
+    return arr.reduce(([min, max], n) => [n < min ? n : min, n > max ? n : max], [arr[0], arr[1]])
+}
 
 export const union = <T>(a: Set<T>, b: Set<T>): Set<T> => new Set([...a, ...b])
 
@@ -94,10 +98,7 @@ export const neighbours = (map: number[], i: number, width: number, allowDiagona
   const firstColumn = i % width === 0
   const lastColumn = i % width === width - 1
 
-  let positions: number[] = [
-    i - width,
-    i + width,
-  ]
+  let positions: number[] = [i - width, i + width]
 
   if (!firstColumn) {
     positions.push(i - 1)
@@ -117,9 +118,11 @@ export const neighbours = (map: number[], i: number, width: number, allowDiagona
     }
   }
 
-  return positions.map((i) => {
-    if (map[i] == null) return null
+  return positions
+    .map((i) => {
+      if (map[i] == null) return null
 
-    return [i, i % width, Math.floor(i / width)]
-  }).filter(x => !!x) as number[][]
+      return [i, i % width, Math.floor(i / width)]
+    })
+    .filter((x) => !!x) as number[][]
 }
