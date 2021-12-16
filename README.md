@@ -167,9 +167,9 @@ Both parts: 6.19ms
 
 ```
 Day 15
-Time part 1: 81.84ms
-Time part 2: 1698.34ms
-Both parts: 1780.18ms
+Time part 1: 35.313ms
+Time part 2: 239.47ms
+Both parts: 274.784ms
 ```
 
 ```

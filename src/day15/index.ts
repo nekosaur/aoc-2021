@@ -26,7 +26,6 @@ const astar = ({ map, width }: MapData, start: number, goal: number, heuristic: 
   const gCosts: Map<number, number> = new Map()
   const fCosts: Map<number, number> = new Map()
   const status: Set<number> = new Set()
-  const parents: (number | null)[] = []
 
   const openList = new heap<number>((a, b) => {
     const af = fCosts.get(a)
@@ -34,30 +33,12 @@ const astar = ({ map, width }: MapData, start: number, goal: number, heuristic: 
 
     if (!af || !bf) throw new Error('foo')
 
-    const diff = Number(af.toFixed(6)) - Number(bf.toFixed(6))
-
-    const ag = gCosts.get(a)
-    const bg = gCosts.get(b)
-
-    if (!ag || !bg) throw new Error('foo')
-
-    return diff === 0 ? Number(ag.toFixed(6)) - Number(bg.toFixed(6)) : diff
+    return af - bf
   })
-
-  const resolvePath = (goal: number, parents: (number | null)[]) => {
-    const path = []
-    let current: number | null = goal
-    while (current != null) {
-      path.push(current)
-      current = parents[current]
-    }
-    return path
-  }
 
   gCosts.set(start, 0)
   fCosts.set(start, heuristic(start, goal))
   status.add(start)
-  parents[start] = null
   openList.push(start)
 
   while (!openList.empty()) {
@@ -66,7 +47,7 @@ const astar = ({ map, width }: MapData, start: number, goal: number, heuristic: 
     if (current == null) throw new Error('foo')
 
     if (current === goal) {
-      return resolvePath(current, parents)
+      return gCosts.get(goal)
     }
 
     for (const [n] of neighbours(map, current, width)) {
@@ -76,7 +57,6 @@ const astar = ({ map, width }: MapData, start: number, goal: number, heuristic: 
       if (gCost < oldGCost) {
         gCosts.set(n, gCost)
         fCosts.set(n, gCost + heuristic(n, goal))
-        parents[n] = current
 
         if (!status.has(n)) {
           status.add(n)
@@ -88,20 +68,20 @@ const astar = ({ map, width }: MapData, start: number, goal: number, heuristic: 
     }
   }
 
-  return []
+  return -1
 }
 
 const part1 = (rawInput: string) => {
   const input = parseInput(rawInput)
 
-  const path = astar(input, 0, input.map.length - 1, (a: number, b: number) => {
+  const score = astar(input, 0, input.map.length - 1, (a: number, b: number) => {
     const [ax, ay] = [a % input.width, Math.floor(a / input.width)]
     const [bx, by] = [b % input.width, Math.floor(b / input.width)]
 
     return Math.abs(ax - bx) + Math.abs(ay - by)
   })
 
-  return path.slice(0, -1).reduce((curr, id) => curr + input.map[id], 0)
+  return score
 }
 
 const expand = ({ map, width, height }: MapData, times: number = 5) => {
@@ -142,14 +122,14 @@ const part2 = (rawInput: string) => {
 
   const input = expand(small)
 
-  const path = astar(input, 0, input.map.length - 1, (a: number, b: number) => {
+  const score = astar(input, 0, input.map.length - 1, (a: number, b: number) => {
     const [ax, ay] = [a % input.width, Math.floor(a / input.width)]
     const [bx, by] = [b % input.width, Math.floor(b / input.width)]
 
     return Math.abs(ax - bx) + Math.abs(ay - by)
   })
 
-  return path.slice(0, -1).reduce((curr, id) => curr + input.map[id], 0)
+  return score
 }
 
 const exampleInput = `
