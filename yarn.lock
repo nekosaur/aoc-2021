@@ -60,10 +60,10 @@ anymatch@~3.1.2:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-aocrunner@^1.4.8:
-  version "1.4.8"
-  resolved "https://registry.yarnpkg.com/aocrunner/-/aocrunner-1.4.8.tgz#5fe29cecefa45fef45edbe1382fa92cf11f3a80c"
-  integrity sha512-MNNfyYTwyM2JbBv/l/ph/MWNKOy8DlZYFguv2GwIX0ZNbxinUg0rLGWPvXTn3RwHy+gjyLyBT3YCw9gWtiUWVg==
+aocrunner@^1.5.0:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/aocrunner/-/aocrunner-1.6.1.tgz#f9a1a57a8ca8733d83d18d95a59976025224e3d3"
+  integrity sha512-OBLerehEoCkVSHnMKQapfvZXcQeuxsrjqOco0BT9DPy3q0zA2PXFdBeYKM6Kl3lTW2H72ysMzOUpPsjEfVJe5A==
   dependencies:
     chokidar "^3.5.2"
     common-tags "^1.8.0"
