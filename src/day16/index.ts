@@ -11,6 +11,9 @@ enum Type {
   GREATER_THAN_OPERATOR = 5,
   LESS_THAN_OPERATOR = 6,
   EQUAL_OPERATOR = 7,
+}
+
+enum LengthType {
   TOTAL_LENGTH = 0,
   NUM_PACKETS = 1,
 }
@@ -59,7 +62,7 @@ const decodePacket = (packet: number[]): Packet => {
     const lengthType = read(packet, 1)
     const subPackets = []
 
-    if (lengthType === Type.TOTAL_LENGTH) {
+    if (lengthType === LengthType.TOTAL_LENGTH) {
       let length = read(packet, 15)
       
       while (length > 0) {
@@ -67,7 +70,7 @@ const decodePacket = (packet: number[]): Packet => {
         length = length - subPacket.length
         subPackets.push(subPacket)
       }
-    } else if (lengthType === Type.NUM_PACKETS) {
+    } else if (lengthType === LengthType.NUM_PACKETS) {
       let numPackets = read(packet, 11)
       while (numPackets > 0) {
         const subPacket = decodePacket(packet)
